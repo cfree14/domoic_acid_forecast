@@ -31,9 +31,9 @@ data1 <- data_orig1 %>%
          organization=org,
          site=site_name,
          comm_name=species, 
-         psp_ug=psp_result,
-         domoic_ug=domoic_result,
-         dsp_ug=dsp_result,
+         psp_ug100g=psp_result,
+         domoic_ppm=domoic_result,
+         dsp_ug100g=dsp_result,
          comments=sample_comments) %>% 
   # Format date
   mutate(date=lubridate::ymd(date),
@@ -42,9 +42,9 @@ data1 <- data_orig1 %>%
   # Format species
   mutate(comm_name=stringr::str_to_sentence(comm_name)) %>% 
   # Format results
-  mutate(domoic_ug=ifelse(domoic_ug %in% c("<1", "NTD"), 0, domoic_ug) %>% as.numeric(),
-         psp_ug=ifelse(psp_ug %in% c("<38", "NTD"), 0, psp_ug) %>% as.numeric(),
-         dsp_ug=ifelse(dsp_ug %in% c("<1", "NTD"), 0, dsp_ug) %>% as.numeric()) %>% 
+  mutate(domoic_ppm=ifelse(domoic_ppm %in% c("<1", "NTD"), 0, domoic_ppm) %>% as.numeric(),
+         psp_ug100g=ifelse(psp_ug100g %in% c("<38", "NTD"), 0, psp_ug100g) %>% as.numeric(),
+         dsp_ug100g=ifelse(dsp_ug100g %in% c("<1", "NTD"), 0, dsp_ug100g) %>% as.numeric()) %>% 
   # Arrange
   select(year, month, date, organization, everything())
   
@@ -59,9 +59,9 @@ table(data1$site)
 table(data1$subsite)
 table(data1$comm_name)
 table(data1$tissue)
-sort(unique(data1$domoic_ug))
-sort(unique(data1$psp_ug))
-sort(unique(data1$dsp_ug))
+sort(unique(data1$domoic_ppm))
+sort(unique(data1$psp_ug100g))
+sort(unique(data1$dsp_ug100g))
 
 
 # Format data
@@ -81,7 +81,7 @@ data2 <- data_orig2 %>%
          organization=org,
          site=site_name,
          comm_name=species, 
-         domoic_ug=domoic_result) %>% 
+         domoic_ppm=domoic_result) %>% 
   # Format date
   mutate(date=lubridate::ymd(date),
          year=lubridate::year(date), 
@@ -89,7 +89,7 @@ data2 <- data_orig2 %>%
   # Format species
   mutate(comm_name=stringr::str_to_sentence(comm_name)) %>% 
   # Format results
-  mutate(domoic_ug=ifelse(domoic_ug %in% c("<1", "NTD"), 0, domoic_ug) %>% as.numeric()) %>% 
+  mutate(domoic_ppm=ifelse(domoic_ppm %in% c("<1", "NTD"), 0, domoic_ppm) %>% as.numeric()) %>% 
   # Arrange
   select(year, month, date, organization, everything())
 
@@ -104,7 +104,7 @@ table(data2$site)
 table(data2$subsite)
 table(data2$comm_name)
 table(data2$tissue)
-sort(unique(data2$domoic_ug))
+sort(unique(data2$domoic_ppm))
 
 
 # Format data
@@ -124,7 +124,7 @@ data3 <- data_orig3 %>%
     organization=org,
     site=site_name,
     comm_name=species, 
-    domoic_ug=domoic_result) %>% 
+    domoic_ppm=domoic_result) %>% 
   # Format date
   mutate(date=lubridate::ymd(date),
          year=lubridate::year(date), 
@@ -132,7 +132,7 @@ data3 <- data_orig3 %>%
   # Format species
   mutate(comm_name=stringr::str_to_sentence(comm_name)) %>% 
   # Format results
-  mutate(domoic_ug=ifelse(domoic_ug %in% c("<1", "NTD"), 0, domoic_ug) %>% as.numeric()) %>% 
+  mutate(domoic_ppm=ifelse(domoic_ppm %in% c("<1", "NTD"), 0, domoic_ppm) %>% as.numeric()) %>% 
   # Arrange
   select(year, month, date, organization, everything())
 
@@ -146,7 +146,7 @@ table(data3$site)
 table(data3$subsite)
 table(data3$comm_name)
 table(data3$tissue)
-sort(unique(data3$domoic_ug))
+sort(unique(data3$domoic_ppm))
 
 
 # Merge data
@@ -154,7 +154,13 @@ sort(unique(data3$domoic_ug))
 
 # Merge data
 data <- bind_rows(data1, data2, data3) %>% 
-  arrange(date)
+  # Arrange
+  arrange(date) %>% 
+  # Add columns
+  mutate(state="Washington",
+         sci_name=recode(comm_name,
+                         "Dungeness crab"="Metacarcinus magister",
+                         "Razor clam"="Siliqua patula"))
 
 # Any duplicates?
 freeR::which_duplicated(data$da_id)
@@ -174,7 +180,7 @@ table(data$site)
 table(data$subsite)
 table(data$comm_name)
 table(data$tissue)
-sort(unique(data$domoic_ug))
+sort(unique(data$domoic_ppm))
 
 
 # Export data
