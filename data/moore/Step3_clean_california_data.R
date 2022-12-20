@@ -372,6 +372,17 @@ data <- bind_rows(data1, data2, data3, data4a, data5a, data6) %>%
                               ">30 outside"=">30",
                               "deep outside of 30 fathoms"=">30",
                               "shallow inside of 30 fathoms"="<30")) %>% 
+  # Format common name
+  mutate(comm_name=recode(comm_name,
+                          "Box crab"="Brown box crab",
+                          "King crab"="Scarlet king crab")) %>% 
+  # Add scientific name
+  mutate(sci_name=recode(comm_name, 
+                         "Brown box crab"="Lopholithodes foraminatus",
+                         "Dungeness crab"="Metacarcinus magister", 
+                         "Scarlet king crab"="Lithodes couesi",
+                         "Razor clam"="Siliqua patula",
+                         "Rock crab"="Cancer spp.")) %>% 
   # Remove useless
   # I'm going to remove area because it only occurs in 6 and its basically port
   select(-c(county_order, latlong, lat_dms, long_dms, sample_type, area)) %>% 
@@ -379,7 +390,7 @@ data <- bind_rows(data1, data2, data3, data4a, data5a, data6) %>%
   select(sample_id, year, month, date, 
          state, county, port, site, block_id, depth_fathoms,
          lat_dd, long_dd,
-         comm_name, tissue, sample_n, 
+         comm_name, sci_name, tissue, sample_n, 
          domoic_ppm, domoic_mod, 
          comments,
          # meat_ppm, viscera_ppm, meat_div_visc, 

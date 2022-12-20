@@ -1,0 +1,86 @@
+"","county","waterbody","site","subsite","n","lat_dd","long_dd"
+"1","Clallam","Clallam Coast","Second Beach",NA,2,47.88407,-124.61795
+"2","Grays Harbor","Grays Harbor","Grays Harbor","Inside Grays Harbor",66,NA,NA
+"3","Grays Harbor","Grays Harbor","Grays Harbor","Inside Grays Harbor - Damon Point",6,NA,NA
+"4","Grays Harbor","Grays Harbor","Grays Harbor","Inside Grays Harbor - South Jetty",11,NA,NA
+"5","Grays Harbor","Grays Harbor","Grays Harbor","Westport - Inside Westport Boat Basin",6,NA,NA
+"6","Grays Harbor","Grays Harbor","Grays Harbor",NA,12,46.96043,-124.03574
+"7","Grays Harbor","Grays Harbor Coast","Copalis Area GS",NA,24,47.10565,-124.1805
+"8","Grays Harbor","Grays Harbor Coast","Copalis Area K",NA,9,47.02425,-124.17306
+"9","Grays Harbor","Grays Harbor Coast","Copalis Area XK",NA,15,47.05485,-124.17132
+"10","Grays Harbor","Grays Harbor Coast","Copalis Area XL",NA,61,47.08932,-124.17635
+"11","Grays Harbor","Grays Harbor Coast","Hogs Back","Queets",1,NA,NA
+"12","Grays Harbor","Grays Harbor Coast","Hogs Back","Whale Creek",1,47.44479,-124.34284
+"13","Grays Harbor","Grays Harbor Coast","Mocrocks Area BC",NA,46,47.15894,-124.19493
+"14","Grays Harbor","Grays Harbor Coast","Mocrocks Area CP",NA,33,47.18253,-124.19996
+"15","Grays Harbor","Grays Harbor Coast","Mocrocks Area MP",NA,25,47.23253,-124.21625
+"16","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","10 Fathom",18,NA,NA
+"17","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","20 Fathom",18,NA,NA
+"18","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Copalis",24,NA,NA
+"19","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Ocean Shores",42,NA,NA
+"20","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Point Chehalis to Copalis River - Copalis",6,NA,NA
+"21","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Point Chehalis to Copalis River - Ocean Shores",6,NA,NA
+"22","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Point Chehalis to Destruction Island - Copalis",6,NA,NA
+"23","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island","Point Chehalis to Destruction Island - Ocean Shores",6,NA,NA
+"24","Grays Harbor","Grays Harbor Coast","Pt Chehalis to Destruction Island",NA,6,47.302236,-124.293462
+"25","Grays Harbor","Grays Harbor Coast","Quinault Res A",NA,23,47.24911,-124.2219
+"26","Grays Harbor","Grays Harbor Coast","Quinault Res B",NA,56,47.26746,-124.22931
+"27","Grays Harbor","Grays Harbor Coast","Quinault Res C",NA,21,47.28439,-124.23612
+"28","Grays Harbor","Grays Harbor Coast","Quinault Res D",NA,1,47.29891,-124.24737
+"29","Grays Harbor","Grays Harbor Coast","Quinault Reservation","Hogs Back",1,47.34562,-124.30553
+"30","Grays Harbor","Grays Harbor Coast","Quinault Reservation","Tunnel Island",1,NA,NA
+"31","Grays Harbor","Grays Harbor Coast","Twin Harbors Area XH",NA,11,46.80016,-124.10115
+"32","Jefferson","Jefferson Coast","Destruction Is to US/Canada Border","From Southern End Of Unit Near Destruction Island",6,NA,NA
+"33","Jefferson","Jefferson Coast","Destruction Is to US/Canada Border",NA,12,48.002783,-124.712495
+"34","Jefferson","Jefferson Coast","Kalaloch Beach",NA,2,47.58597,-124.37914
+"35","Jefferson","Jefferson Coast","Kalaloch Beach North",NA,2,47.61132,-124.37725
+"36","Jefferson","Jefferson Coast","Kalaloch Beach South",NA,35,47.56811,-124.36307
+"37","Pacific","Pacific County Coast","Cape Disappointment/Pt Brown","Inside Columbia River - North Jetty",1,46.66527,-124.16547
+"38","Pacific","Pacific County Coast","Cape Disappointment/Pt Brown","Long Beach - Cranberry (15 fathoms)",3,NA,NA
+"39","Pacific","Pacific County Coast","Cape Disappointment/Pt Brown","Long Beach - Cranberry (30 fathoms)",1,NA,NA
+"40","Pacific","Pacific County Coast","Cape Disappointment/Pt Brown","Long Beach - Seaview (7 fathoms)",1,46.66527,-124.16547
+"41","Pacific","Pacific County Coast","Long Beach Area E",NA,39,46.56289,-124.05813
+"42","Pacific","Pacific County Coast","Long Beach Area OY",NA,7,46.50431,-124.06028
+"43","Pacific","Pacific County Coast","Long Beach Area XA",NA,9,46.39556,-124.05878
+"44","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","15 Fathom",6,NA,NA
+"45","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Inside Columbia River - North Jetty",29,NA,NA
+"46","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Cranberry (15 fathoms)",27,NA,NA
+"47","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Cranberry (30 fathoms)",11,NA,NA
+"48","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Cranberry (7 fathoms)",30,NA,NA
+"49","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Peacock Spit",6,NA,NA
+"50","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Peacock Spit (15 fathoms)",29,NA,NA
+"51","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Peacock Spit (7 fathoms)",30,NA,NA
+"52","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Seaview",6,NA,NA
+"53","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Seaview (15 fathoms)",30,NA,NA
+"54","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Long Beach - Seaview (7 fathoms)",29,NA,NA
+"55","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Point Chehalis to Klipsan - Grayland",46,NA,NA
+"56","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Point Chehalis to Klipsan - Ocean Park",6,NA,NA
+"57","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Point Chehalis to Klipsan - Outside Willapa",30,NA,NA
+"58","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Point Chehalis to Klipsan - Westport",6,NA,NA
+"59","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","WA/OR Border to Klipsan - Cranberry",12,NA,NA
+"60","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","WA/OR Border to Klipsan - Long Beach",12,NA,NA
+"61","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","WA/OR Border to Klipsan - Ocean Park",6,NA,NA
+"62","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","WA/OR Border to Klipsan - Peacock Spit",48,NA,NA
+"63","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","WA/OR Border to Klipsan - Seaview",34,NA,NA
+"64","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Grayland",6,NA,NA
+"65","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Grayland (15 fathoms)",22,NA,NA
+"66","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Grayland (7 fathoms)",24,NA,NA
+"67","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Outside Willapa",6,NA,NA
+"68","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Outside Willapa (15 fathoms)",22,NA,NA
+"69","Pacific","Pacific County Coast","OR/WA border to Pt Chehalis","Westport - Outside Willapa (7 fathoms)",24,NA,NA
+"70","Pacific","Pacific County Coast","Twin Harbors Area CL",NA,37,46.79202,-124.09969
+"71","Pacific","Pacific County Coast","Twin Harbors Area G",NA,7,46.75863,-124.09743
+"72","Pacific","Pacific County Coast","Twin Harbors Area H",NA,1,NA,NA
+"73","Pacific","Willapa Bay","North Willapa Bay","North Willapa Tokeland",6,NA,NA
+"74","Pacific","Willapa Bay","Shoalwater Bay Reservation",NA,17,46.722241,-124.032677
+"75","Pacific","Willapa Bay","Tokeland Marina","Tokeland Reservation",1,NA,NA
+"76","Pacific","Willapa Bay","Tokeland Marina",NA,2,46.71478,-123.96633
+"77","Pacific","Willapa Bay","Willapa Bay","Inside Willapa Bay",60,NA,NA
+"78","Pacific","Willapa Bay","Willapa Bay","North Willapa Bay Tokeland",12,NA,NA
+"79","Pacific","Willapa Bay","Willapa Bay","Tokeland Area",12,46.65069,-123.98007
+"80","Pacific","Willapa Bay","Willapa Spits","240 Spit",1,46.67832,-124.02712
+"81","Pacific","Willapa Bay","Willapa Spits","North",8,NA,NA
+"82","Pacific","Willapa Bay","Willapa Spits","South",8,NA,NA
+"83","Pacific","Willapa Bay","Willapa Spits","Subsite A",1,NA,NA
+"84","Pacific","Willapa Bay","Willapa Spits","Subsite B",1,NA,NA
+"85","Pacific","Willapa Bay","Willapa Spits",NA,18,46.67832,-124.02712

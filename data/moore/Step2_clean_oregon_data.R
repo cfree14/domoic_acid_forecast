@@ -128,6 +128,8 @@ data <- bind_rows(data1, data2) %>%
   arrange(date) %>% 
   # Add state
   mutate(state="Oregon") %>% 
+  # Add Dcrab area as site name (more detailed than site (Pacific Ocean))
+  mutate(site=ifelse(!is.na(dcrab_area), dcrab_area, site)) %>% 
   # Add scientific name
   mutate(sci_name=recode(comm_name,
                          "Dungeness crab"="Metacarcinus magister",
@@ -140,7 +142,9 @@ data <- bind_rows(data1, data2) %>%
   # Arrange
   select(sample_id, year, month, date, 
          state, area, site, dcrab_area, 
-         shellfish_type, comm_name, sci_name, tissue, domoic_ppm, psp_ug100g, comments, everything())
+         shellfish_type, comm_name, sci_name, tissue, domoic_ppm, psp_ug100g, comments, everything()) %>% 
+  # Remove useless
+  select(-c(dcrab_area, shellfish_type))
 
 # Inspect
 str(data)
@@ -153,20 +157,83 @@ freeR::which_duplicated(data$sample_id)
 range(data$date)
 table(data$area)
 table(data$site)
-table(data$dcrab_area)
-table(data$shellfish_type)
+# table(data$dcrab_area)
+# table(data$shellfish_type)
 table(data$comm_name)
 table(data$tissue)
 
+
+# Add lat/long
+################################################################################
+
+# Get lat/long for sites in old data
+
+# Read old data
+or_old <- readRDS("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/oregon/processed/ODA_2000_2020_da_sampling_data_final.Rds")
+site_key_old <- or_old %>% 
+  select(location, lat_dd, long_dd) %>% 
+  unique()
+
 # Site key
 site_key <- data %>% 
-  count(area, site, dcrab_area)
+  count(area, site) %>% 
+  arrange(site) %>% 
+  mutate(site_match=recode(site, 
+                           # "15th Street"    
+                           "Agate Beach"="Newport Beach-Agate Beach",
+                           # "Baker Beach"            
+                           "Bob Creek"="Bob Creek Wayside",
+                           "Cape Meares"="Cape Meares-Bayocean Spit",
+                           # "Coos Bay"              
+                           "Coos N Jetty & Spit"="Coos Bay-North Jetty",
+                           "Gold Beach"="Gold Beach-Myers Creek",
+                           "Neptune St Park"="Cape Perpetua-Neptune State Park",
+                           "North Jetty"="Newport Beach-North Jetty",
+                           "Seal Rock State Park"="Seal Rock State Park",
+                           "Silver Point"="Silver Point-Arcadia Beach State Park",
+                           "South Jetty"="Clatsop Beach-South Jetty",
+                           # "Sparrow Park"           
+                           "Sunset Beach"="Clatsop Beach-Sunset",
+                           "Whiskey Run"="Whiskey Run Beach",
+                           "Yachats"="Yachats River",
+                           "50-A (Astoria)"="50-A - OR/WA Border to Cape Falcon",       
+                           "50-B (Garibaldi)"="50-B - Cape Falcon to Cape Lookout",  
+                           "50-C (Pacific City)"="50-C - Cape Lookout to Cascade Head",   
+                           "50-D (Depoe Bay)"="50-D - Cascade Head to Cape Foulweather",      
+                           "50-E (Newport)"="50-E - Cape Foulweather to Waldport",      
+                           "50-F (Waldport)"="50-F - Waldport to Heceta Head",       
+                           "50-G (Florence)"="50-G - Heceta Head to Takenitch Creek",        
+                           "50-H (Winchester Bay)"="50-H - Takenitch Creek to North Bend",
+                           "50-I (Coos Bay)"="50-I - North Bend to Bandon",       
+                           "50-J (Bandon)"="50-J - Bandon to Cape Blanco",        
+                           "50-K (Port Orford)"="50-K - Cape Blanco to Gold Beach",     
+                           "50-L (Brookings)"="50-L - Gold Beach to OR/CA Border",      
+                           "50-O (Columbia River))"="50-O - Columbia River")) %>% 
+  # Add coordinates
+  left_join(site_key_old, by=c("site_match"="location")) %>% 
+  # Add missing manually
+  mutate(lat_dd=ifelse(site=="15th Street", 44.975419, lat_dd),
+         long_dd=ifelse(site=="15th Street", -124.017121, long_dd))
+# write.csv(site_key, file.path(indir, "oregon_site_key.csv"), row.names = F)
 
+# Add
+data_xy <- data %>% 
+  # Add lat/long
+  left_join(site_key %>% select(site, lat_dd, long_dd), by="site") %>% 
+  # Arrange
+  select(sample_id, year, month, date, 
+         state, area, site, lat_dd, long_dd,
+         comm_name, sci_name, tissue, domoic_ppm, psp_ug100g, comments, everything())
+
+# Inspect
+str(data_xy)
+freeR::complete(data_xy)
+  
 
 # Export data
 ################################################################################
 
 # Save data
-saveRDS(data, file=file.path(outdir, "OR_2021_2022_biotoxin_data.Rds"))
+saveRDS(data_xy, file=file.path(outdir, "OR_2021_2022_biotoxin_data.Rds"))
 
 
