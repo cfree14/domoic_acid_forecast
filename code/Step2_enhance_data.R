@@ -13,10 +13,8 @@ indir <- "data/moore/processed"
 outdir <- "data/da_samples/data"
 
 # Read data
-data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data.Rds"))
-
-# Blocks
-blocks <- wcfish::blocks
+data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data.Rds")) %>% 
+  mutate(row_id=1:n())
 
 # Read zones
 zone_df <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_da_mgmt_zones.xlsx")
@@ -26,6 +24,28 @@ zones <- zone_df %>%
   pull(zone_id) %>% rev()
 
 
+# Id blocks
+################################################################################
+
+# Blocks
+blocks <- wcfish::blocks
+blocks_sp <- blocks %>% 
+  select(block_id) %>% 
+  sf::as_Spatial()
+
+# Convert to sp
+data_sp <- data_orig %>% 
+  filter(!is.na(lat_dd) & !is.na(long_dd)) %>% 
+  select(row_id, lat_dd, long_dd) %>% 
+  sf::st_as_sf(coords=c("long_dd", "lat_dd"), crs=sf::st_crs(blocks)) %>% 
+  sf::as_Spatial()
+
+# Identify block
+data_block_key <- sp::over(data_sp, blocks_sp) %>% 
+  as.data.frame() %>% 
+  mutate(row_id=data_sp$row_id)
+
+
 # Format data
 ################################################################################
 
@@ -33,11 +53,15 @@ zones <- zone_df %>%
 data <- data_orig %>% 
   # Add zone
   mutate(zone=cut(lat_dd, breaks=zone_lats, labels=zones)) %>% 
+  # Add block id
+  left_join(data_block_key) %>% 
+  # Remove
+  select(-row_id) %>% 
   # Arrange
   select(state, organization,
          comm_name, sci_name, 
          year, month, date,
-         zone, site, lat_dd, long_dd, 
+         zone, block_id, site, lat_dd, long_dd, 
          domoic_id, domoic_tissue, domoic_n, domoic_ppm, domoic_mod,
          psp_id, psp_tissue, psp_ug100g,
          dsp_id, dsp_tissue, dsp_ug100g, notes)
@@ -96,6 +120,26 @@ g <- ggplot(data, aes(x=long_dd, y=lat_dd, color=zone)) +
   geom_point() +
   # Legend
   scale_color_discrete(name="") +
+  # Crop
+  coord_sf(xlim = c(-126, -116), ylim = c(32, 50)) +
+  # Theme
+  theme_bw() + base_theme +
+  theme(axis.title=element_blank(),
+        axis.text.y = element_text(angle = 90, hjust = 0.5),
+        legend.key.size = unit(0.3, "cm"),
+        legend.position = "right")
+g
+
+# Plot data by zone
+g <- ggplot(data, aes(x=long_dd, y=lat_dd, color=block_id)) +
+  # Plot states
+  geom_sf(data=usa, fill="grey85", col="white", size=0.2, inherit.aes = F) +
+  geom_sf(data=mexico, fill="grey85", col="white", size=0.2, inherit.aes = F) +
+  geom_sf(data=canada, fill="grey85", col="white", size=0.2, inherit.aes = F) +
+  # Plot points
+  geom_point() +
+  # Legend
+  scale_color_gradientn(name="", colors=RColorBrewer::brewer.pal(9, "Spectral")) +
   # Crop
   coord_sf(xlim = c(-126, -116), ylim = c(32, 50)) +
   # Theme

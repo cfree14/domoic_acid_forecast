@@ -66,7 +66,7 @@ table(data$notes)
 
 # Site key
 site_key <- data %>% 
-  count(state, zone, site)
+  count(state, zone, block_id, site)
 
 
 # Check season
@@ -88,7 +88,6 @@ g <- ggplot(data, aes(x=date, y=lat_dd, color=as.character(season))) +
 g
 
 
-
 # Survey results
 ################################################################################
 
@@ -97,7 +96,7 @@ results <- data %>%
   # Reduce to viscera only
   filter(domoic_tissue=="viscera") %>% 
   # Summarize
-  group_by(state, state_abbrev, organization, season, year, month, date, zone, site, survey_id) %>% 
+  group_by(state, state_abbrev, organization, season, year, month, date, zone, block_id, site, survey_id) %>% 
   summarize(lat_dd=mean(lat_dd),
             long_dd=mean(long_dd),
             n=n(),

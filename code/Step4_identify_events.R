@@ -26,6 +26,8 @@ data <- data_orig %>%
   filter(n>=3) %>% 
   # Add event id
   mutate(event_id=case_when(state=="Oregon" ~ paste(season, state_abbrev, zone, sep="-"),
+                            state=="California" ~ paste(season, state_abbrev, block_id, sep="-"),
+                            state=="Washington" ~ paste(season, state_abbrev, site, sep="-"),
                             T ~ paste(season, state_abbrev, site, sep="-"))) %>% 
   # Arrange
   select(state:site, lat_dd, long_dd, survey_id, event_id, everything()) 
@@ -178,6 +180,36 @@ g
 ggsave(g, filename=file.path(plotdir, "FigS3_event_identification_zoom_california.png"),
        width=6.5, height=3.5, units="in", dpi=600)
 
+
+# CA site key
+site_key <- data_exp %>% 
+  count(state, lat_dd, block_id, site)
+block_key <- data_exp %>% 
+  group_by(state, block_id) %>% 
+  summarize(lat_dd=mean(lat_dd))
+
+# Plot data
+g <- ggplot(data_exp %>% filter(state=="California" & season >=2014),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # Labels
+  labs(x="Date", y="Latitude (°N)", title="California") +
+  # Axes
+  # scale_y_continuous(lim=c(36.5, 42), breaks=36:42) +
+  scale_y_continuous(breaks=block_key$lat_dd, labels=block_key$block_id) +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS3_event_identification_zoom_california_long.png"),
+       width=4.5, height=11.5, units="in", dpi=600)
 
 
 # Inspect events
