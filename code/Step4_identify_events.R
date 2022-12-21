@@ -17,37 +17,29 @@ plotdir <- "figures"
 data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys.Rds"))
 
 
-# OREGON
-################################################################################
-################################################################################
-
 # Format data
 ################################################################################
 
 # Format data
 data <- data_orig %>% 
-  # Reduce to Oregon
-  filter(state=="Oregon" & n>=3) %>% 
-  # Simplify
-  select(state_abbrev, season, zone, site, lat_dd, date, survey_id, n, domoic_ppm_max) %>% 
+  # Useable surveys
+  filter(n>=3) %>% 
   # Add event id
-  mutate(event_id=paste(season, state_abbrev, zone, sep="-")) %>% 
+  mutate(event_id=case_when(state=="Oregon" ~ paste(season, state_abbrev, zone, sep="-"),
+                            T ~ paste(season, state_abbrev, site, sep="-"))) %>% 
   # Arrange
-  arrange(site, date)
+  select(state:site, lat_dd, long_dd, survey_id, event_id, everything()) 
 
-# Event stats
-################################################################################
+# Inspect
+freeR::complete(data)
 
-# Events
+# Compue event statistics (# of surveys per event)
 events <- data %>% 
   group_by(event_id) %>% 
   summarise(nsurveys=n()) %>% 
   ungroup()
 
-# Extend data based on event stats
-################################################################################
-
-# Expand data
+# Add event statistics to data
 data_exp <- data %>% 
   # Add event stats
   left_join(events) %>% 
@@ -60,12 +52,14 @@ data_exp <- data %>%
          event_day=difftime(date, event_day0, units = "day") %>% as.numeric()) %>% 
   ungroup()
 
-# Inspect events
+
+# Washington
 ################################################################################
 
 # Theme
 my_theme <-  theme(axis.text=element_text(size=7),
                    axis.title=element_text(size=8),
+                   plot.title = element_text(size=8),
                    legend.text=element_text(size=7),
                    legend.title=element_text(size=8),
                    strip.text=element_text(size=8),
@@ -77,10 +71,130 @@ my_theme <-  theme(axis.text=element_text(size=7),
                    axis.line = element_line(colour = "black"))
 
 # Plot data
-g <- ggplot(data_exp, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+g <- ggplot(data_exp %>% filter(state=="Washington"),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # Labels
+  labs(x="Date", y="Latitude (°N)", title="Washington") +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS2_event_identification_full_washington.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+# Plot data
+g <- ggplot(data_exp %>% filter(state=="Washington" & season >=2014),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # Labels
+  labs(x="Date", y="Latitude (°N)", title="Washington") +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS3_event_identification_zoom_washington.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+# Oregon
+################################################################################
+
+# Plot data
+g <- ggplot(data_exp %>% filter(state=="Oregon"),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
   geom_point(pch=21, alpha=0.5) +
   # Labels
   labs(x="Date", y="Latitude (°N)", title="Oregon") +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS2_event_identification_full_oregon.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+# California
+################################################################################
+
+# Plot data
+g <- ggplot(data_exp %>% filter(state=="California" & season >=1999),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # Labels
+  labs(x="Date", y="Latitude (°N)", title="California") +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS2_event_identification_full_california.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+# Plot data
+g <- ggplot(data_exp %>% filter(state=="California" & season >=2014 & season <= 2018),
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # Labels
+  labs(x="Date", y="Latitude (°N)", title="California") +
+  # Axes
+  scale_y_continuous(lim=c(36.5, 42), breaks=36:42) +
+  # Color legend (events)
+  scale_fill_manual(name="", guide="none",
+                    na.value = "grey80",
+                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
+  # Size legend (DA conc)
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "FigS3_event_identification_zoom_california.png"),
+       width=6.5, height=3.5, units="in", dpi=600)
+
+
+
+# Inspect events
+################################################################################
+
+# Plot data
+g <- ggplot(data_exp %>% filter(season>=1999), 
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+  geom_point(pch=21, alpha=0.5) +
+  # State line
+  geom_hline(yintercept=c(42, 46.25, 48.48)) +
+  geom_hline(yintercept=38+46.125/60, linetype="dashed") +
+  # Labels
+  labs(x="Test date", y="Latitude (°N)") +
+  # Axes
+  scale_x_date(breaks=seq(ymd("2000-01-02"), ymd("2023-01-01"), by="1 year"), date_labels="%Y") +
+  scale_y_continuous(breaks=seq(32, 50, 2)) +
   # Color legend (events)
   scale_fill_manual(name="", guide="none",
                      na.value = "grey80",
@@ -88,121 +202,27 @@ g <- ggplot(data_exp, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_u
   # Size legend (DA conc)
   scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
   # Theme
-  theme_bw() + my_theme
+  theme_bw() + my_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.key.size = unit(0.5, "cm"))
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_oregon_event_identification.png"), 
-       width=6.5, height=3.5, units="in", dpi=600)
-
-# Event decay
-################################################################################
-
-# Theme
-my_theme <-  theme(axis.text=element_text(size=7),
-                   axis.title=element_text(size=8),
-                   legend.text=element_text(size=7),
-                   legend.title=element_text(size=8),
-                   strip.text=element_text(size=8),
-                   plot.tag = element_text(size=9),
-                   # Gridlines
-                   panel.grid.major = element_blank(),
-                   panel.grid.minor = element_blank(),
-                   panel.background = element_blank(),
-                   axis.line = element_line(colour = "black"))
+ggsave(g, filename=file.path(plotdir, "FigS2_event_identification_full.png"), 
+       width=6.5, height=7.5, units="in", dpi=600)
 
 # Plot data
-g <- ggplot(data_exp %>% filter(event_use=="yes"),
-            aes(x=event_day, y=domoic_ppm_max)) +
-  # Facet
-  facet_wrap(~event_id, ncol=6) +
-  # Ribbon
-  # Reference line
-  geom_hline(yintercept=30, linetype="dotted") +
-  # Points
-  geom_point() +
-  # Labels
-  labs(x="Day of event", y="Maximum domoic acid (ppm)") +
-  # Theme
-  theme_bw() + my_theme
-g
-
-# Export
-ggsave(g, filename=file.path(plotdir, "FigX_oregon_event_decay_proof_of_concept.png"), 
-       width=6.5, height=6.5, units="in", dpi=600)
-
-
-
-# WASHINGTON
-################################################################################
-################################################################################
-
-# Format data
-################################################################################
-
-# Format data
-data <- data_orig %>% 
-  # Reduce to Oregon
-  filter(state=="Washington" & n>=3) %>% 
-  # Simplify
-  select(state_abbrev, season, zone, site, lat_dd, date, survey_id, n, domoic_ppm_max) %>% 
-  # Add event id
-  mutate(event_id=paste(season, state_abbrev, site, sep="-")) %>% 
-  # Arrange
-  arrange(site, date)
-
-# Site key 
-site_key <- data %>% 
-  count(lat_dd, site)
-
-# Event stats
-################################################################################
-
-# Events
-events <- data %>% 
-  group_by(event_id) %>% 
-  summarise(nsurveys=n()) %>% 
-  ungroup()
-
-# Extend data based on event stats
-################################################################################
-
-# Expand data
-data_exp <- data %>% 
-  # Add event stats
-  left_join(events) %>% 
-  # Classify as useable event (or not)
-  mutate(event_use=ifelse(nsurveys > 5, "yes", "no"),
-         event_id_use=ifelse(event_use=="yes", event_id, NA)) %>% 
-  # Calculate day 0 and time since day 0
-  group_by(event_id) %>% 
-  mutate(event_day0=min(date),
-         event_day=difftime(date, event_day0, units = "day") %>% as.numeric()) %>% 
-  ungroup()
-
-# Inspect events
-################################################################################
-
-# Theme
-my_theme <-  theme(axis.text=element_text(size=7),
-                   axis.title=element_text(size=8),
-                   legend.text=element_text(size=7),
-                   legend.title=element_text(size=8),
-                   plot.title=element_text(size=8),
-                   strip.text=element_text(size=8),
-                   plot.tag = element_text(size=9),
-                   # Gridlines
-                   panel.grid.major = element_blank(),
-                   panel.grid.minor = element_blank(),
-                   panel.background = element_blank(),
-                   axis.line = element_line(colour = "black"))
-
-# Plot data
-g <- ggplot(data_exp, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
+g <- ggplot(data_exp %>% filter(season>=2015), 
+            aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
   geom_point(pch=21, alpha=0.5) +
+  # State line
+  geom_hline(yintercept=c(42, 46.25, 48.48)) +
+  geom_hline(yintercept=38+46.125/60, linetype="dashed") +
   # Labels
-  labs(x="Date", y="Latitude (°N)", title="Washington") +
-  # scale_y_continuous(breaks=site_key$lat_dd, labels=site_key$site) +
+  labs(x="Test date", y="Latitude (°N)") +
+  # Axes
+  scale_x_date(breaks=seq(ymd("2000-01-02"), ymd("2023-01-01"), by="1 year"), date_labels="%Y") +
+  scale_y_continuous(breaks=seq(32, 50, 2)) +
   # Color legend (events)
   scale_fill_manual(name="", guide="none",
                     na.value = "grey80",
@@ -210,205 +230,53 @@ g <- ggplot(data_exp, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_u
   # Size legend (DA conc)
   scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
   # Theme
-  theme_bw() + my_theme
+  theme_bw() + my_theme +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1),
+        legend.key.size = unit(0.5, "cm"))
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_washington_event_identification.png"), 
-       width=6.5, height=3.5, units="in", dpi=600)
+ggsave(g, filename=file.path(plotdir, "FigS3_event_identification_zoom.png"), 
+       width=6.5, height=7.5, units="in", dpi=600)
+
 
 # Event decay
 ################################################################################
 
 # Theme
-my_theme <-  theme(axis.text=element_text(size=7),
-                   axis.title=element_text(size=8),
-                   legend.text=element_text(size=7),
-                   legend.title=element_text(size=8),
-                   strip.text=element_text(size=8),
-                   plot.tag = element_text(size=9),
+my_theme <-  theme(axis.text=element_text(size=6),
+                   axis.title=element_text(size=7),
+                   legend.text=element_text(size=6),
+                   legend.title=element_text(size=7),
+                   strip.text=element_text(size=6),
                    # Gridlines
                    panel.grid.major = element_blank(),
                    panel.grid.minor = element_blank(),
                    panel.background = element_blank(),
-                   axis.line = element_line(colour = "black"))
+                   axis.line = element_line(colour = "black"),
+                   # Legend
+                   legend.background = element_rect(fill=alpha('blue', 0)),
+                   legend.position = c(0.8, 0.05),
+                   legend.key.size = unit(0.3, "cm"))
 
 # Plot data
 g <- ggplot(data_exp %>% filter(event_use=="yes"),
-            aes(x=event_day, y=domoic_ppm_max)) +
+            aes(x=event_day, y=domoic_ppm_max, color=state)) +
   # Facet
-  facet_wrap(~event_id, ncol=4) +
-  # Ribbon
-  # Reference line
-  geom_hline(yintercept=30, linetype="dotted") +
+  facet_wrap(~event_id, ncol=8, scales="free") +
   # Points
   geom_point() +
-  # Labels
-  labs(x="Day of event", y="Maximum domoic acid (ppm)") +
-  # Theme
-  theme_bw() + my_theme
-g
-
-# Export
-ggsave(g, filename=file.path(plotdir, "FigX_washington_event_decay_proof_of_concept.png"), 
-       width=6.5, height=6.5, units="in", dpi=600)
-
-
-
-# CALIFORNIA
-################################################################################
-################################################################################
-
-# Format data
-################################################################################
-
-# Format data
-data <- data_orig %>% 
-  # Reduce to Oregon
-  filter(state=="California" & n>=3) %>% 
-  # Simplify
-  select(state_abbrev, season, zone, site, lat_dd, date, survey_id, n, domoic_ppm_max) %>% 
-  # Work on sites
-  mutate(site=recode(site,
-                     "Point Arena"="Manchester Beach",
-                     "Trinidad South"="Trinidad Head",
-                     "Trinidad North"="Trinidad Head",
-                     "Del Norte County, OFFSHORE"="Del Norte County (offshore)",
-                     "Humboldt County, OFFSHORE"="Humboldt County (offshore)",
-                     "Mendocino, Pt. Arena OFFSHORE"="Mendocino County (offshore)",
-                     "Sonoma, OFFSHORE"="Sonoma County (offshore)"),
-         site=gsub("Ft", "Fort", site),
-         site=gsub("Pt", "Point", site),
-         site=gsub("ShltCove", "Shelter Cove", site),
-         site=gsub("10MileR", "Ten Mile Run", site),
-         site=gsub(", Manchest", ", Manchester Beach", site)) %>% 
-  # Format sites
-  separate(site, into=c("block_id", "site_name"), sep=", ", remove=F) %>% 
-  mutate(site=ifelse(is.na(site_name), block_id, paste(site_name, block_id, sep="-"))) %>% 
-  select(-c(site_name, block_id)) %>% 
-  # Add event id
-  mutate(event_id=paste(season, state_abbrev, site, sep="-")) %>% 
-  # Arrange
-  arrange(site, date)
-
-# Site key
-site_key_ca <- data %>% 
-  group_by(lat_dd, site) %>% 
-  summarize(years=paste(sort(unique(season)), collapse=", "),
-            n=n()) %>% 
-  ungroup()
-
-
-# Event stats
-################################################################################
-
-# Events
-events <- data %>% 
-  group_by(event_id) %>% 
-  summarise(nsurveys=n()) %>% 
-  ungroup()
-
-# Extend data based on event stats
-################################################################################
-
-# Expand data
-data_exp <- data %>% 
-  # Add event stats
-  left_join(events) %>% 
-  # Classify as useable event (or not)
-  mutate(event_use=ifelse(nsurveys > 5, "yes", "no"),
-         event_id_use=ifelse(event_use=="yes", event_id, NA)) %>% 
-  # Calculate day 0 and time since day 0
-  group_by(event_id) %>% 
-  mutate(event_day0=min(date),
-         event_day=difftime(date, event_day0, units = "day") %>% as.numeric()) %>% 
-  ungroup()
-
-# Inspect events
-################################################################################
-
-# Theme
-my_theme <-  theme(axis.text=element_text(size=7),
-                   axis.title=element_text(size=8),
-                   legend.text=element_text(size=7),
-                   legend.title=element_text(size=8),
-                   strip.text=element_text(size=8),
-                   plot.tag = element_text(size=9),
-                   # Gridlines
-                   panel.grid.major = element_blank(),
-                   panel.grid.minor = element_blank(),
-                   panel.background = element_blank(),
-                   axis.line = element_line(colour = "black"))
-
-# Lats
-lats <- c(34, 35.7, 37, 37.4, 37.7, 37.95, 38.1, 38.35, 38.5, 38.8, 39.3, 40, 40.75,
-          40.9, 41.1, 41.2, 41.35, 41.6)
-
-
-# Plot data
-g <- ggplot(data_exp %>% filter(season>2012), aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=event_id_use)) +
-  geom_point(pch=21, alpha=0.5) +
-  # Lines
-  geom_hline(yintercept=lats, linetype="dotted") +
-  # Labels
-  labs(x="Date", y="Latitude (°N)", title="California") +
-  scale_y_continuous(breaks=site_key_ca$lat_dd, labels = site_key_ca$site, lim=c(36.5, 42)) +
-  # scale_y_continuous(breaks=seq(32,45, 0.5)) +
-  # Color legend (events)
-  scale_fill_manual(name="", guide="none",
-                    na.value = "grey80",
-                    values=rainbow(n_distinct(data$event_id)) %>% sample()) +
-  # Size legend (DA conc)
-  scale_size_continuous(name="Maximum\ndomoic acid (ppm)") +
-  # Theme
-  theme_bw() + my_theme
-g
-
-# Export
-ggsave(g, filename=file.path(plotdir, "FigX_california_event_identification.png"), 
-       width=6.5, height=3.5, units="in", dpi=600)
-
-# Event decay
-################################################################################
-
-# Theme
-my_theme <-  theme(axis.text=element_text(size=7),
-                   axis.title=element_text(size=8),
-                   legend.text=element_text(size=7),
-                   legend.title=element_text(size=8),
-                   strip.text=element_text(size=8),
-                   plot.tag = element_text(size=9),
-                   # Gridlines
-                   panel.grid.major = element_blank(),
-                   panel.grid.minor = element_blank(),
-                   panel.background = element_blank(),
-                   axis.line = element_line(colour = "black"))
-
-# Plot data
-g <- ggplot(data_exp %>% filter(event_use=="yes"),
-            aes(x=event_day, y=domoic_ppm_max)) +
-  # Facet
-  facet_wrap(~event_id, ncol=6) +
-  # Ribbon
   # Reference line
   geom_hline(yintercept=30, linetype="dotted") +
-  # Points
-  geom_point() +
   # Labels
   labs(x="Day of event", y="Maximum domoic acid (ppm)") +
+  # Legend
+  scale_color_discrete(name="State") +
   # Theme
   theme_bw() + my_theme
 g
 
 # Export
-ggsave(g, filename=file.path(plotdir, "FigX_california_event_decay_proof_of_concept.png"), 
-       width=6.5, height=6.5, units="in", dpi=600)
-
-
-
-
-
-
-
-
+ggsave(g, filename=file.path(plotdir, "FigS4_event_decay.png"), 
+       width=6.5, height=7.5, units="in", dpi=600)
 

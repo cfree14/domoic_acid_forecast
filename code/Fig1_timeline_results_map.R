@@ -21,7 +21,8 @@ data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dc
 zones_orig <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_da_mgmt_zones.xlsx")
 
 # Read sites
-sample_sites <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_sampling_sites.xlsx", sheet=2)
+sample_sites <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_sampling_sites.xlsx", sheet=2) %>% 
+  mutate(location=ifelse(state=="Washington", NA, location))
 
 # Get land
 usa <- rnaturalearth::ne_states(country="United States of America", returnclass = "sf")
@@ -156,6 +157,8 @@ g1 <- ggplot(zones) +
   geom_text(data=zone_pts, mapping=aes(x=long_dd, y=lat_dd, label=zone_id), size=1.5, color="grey50", hjust=0) +
   # Plot sampling sites
   geom_point(data=sample_sites, mapping=aes(x=long_dd, y=lat_dd), size=1, color="darkred") +
+  geom_text(data=sample_sites, mapping=aes(x=long_dd+0.3, y=lat_dd, label=location), 
+            hjust=0, size=1.2, color="darkred", show.legend = F) +
   # Labels
   labs(x="", y="", tag="A") +
   scale_x_continuous(breaks=seq(-128,120,2)) +
