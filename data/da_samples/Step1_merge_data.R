@@ -126,14 +126,14 @@ wa1 <- wa1_orig %>%
   select(state, sample_id,
          year, month, date, 
          organization, 
-         county, waterbody, site, subsite, lat_dd, long_dd, 
+         county, waterbody, site_id, site, subsite, lat_dd, long_dd, 
          comm_name, sci_name,  
          domoic_id, domoic_tissue, domoic_ppm, 
          psp_id, psp_tissue, psp_ug100g,
          dsp_id, dsp_tissue, dsp_ug100g,
          everything()) %>% 
   # Remove select columns
-  select(-c(sample_id, organization_id, site_id,
+  select(-c(sample_id, organization_id, 
             submit_date, receive_date, domoic_date, psp_date, dsp_date, 
             monitoring_type, sample_type, shell_shucked, fresh_frozen))
   
@@ -157,7 +157,7 @@ wa2 <- wa2_orig %>%
   select(state,
          year, month, date, 
          organization, 
-         county, waterbody, site, subsite,
+         county, waterbody, site_id, site, subsite,
          comm_name, sci_name,  
          domoic_id, domoic_tissue, domoic_ppm, 
          psp_id, psp_tissue, psp_ug100g, 
@@ -168,13 +168,18 @@ wa2 <- wa2_orig %>%
 str(wa2)
 freeR::complete(wa2)
 
-# Merge data
-wa <- bind_rows(wa1, wa2) %>% 
+# Merge data (retaining all the spatial info)
+wa_full <- bind_rows(wa1, wa2) %>% 
   # Format organization
   mutate(organization=recode(organization,
                              "Department of Fish & Wildlife"="WDFW",
                              "Department of Health"="WDPH"))
 
+# Simplify
+wa <- wa_full %>% 
+  # Remove spatial
+  select(-c(county, waterbody, site_id, subsite))
+  
 # Inspect
 str(wa)
 freeR::complete(wa)
@@ -190,9 +195,13 @@ table(wa$month)
 sort(unique(wa$organization))
 
 # Location
-table(wa$county)
-table(wa$waterbody)
+table(wa_full$county)
+table(wa_full$waterbody)
+sort(unique(wa_full$subsite))
+sort(unique(wa_full$site_id))
 sort(unique(wa$site))
+site_key <- wa_full %>% count(site_id, site)
+freeR::which_duplicated(site_key$site)
 
 # Species key
 table(wa$comm_name)
@@ -295,7 +304,11 @@ ca <- bind_rows(ca1_crab, ca1_biv, ca2) %>%
                      "Ft. Bragg"="Fort Bragg"),
          organization="CDFW") %>% 
   # Make unique
-  unique()
+  unique() %>% 
+  # Format site
+  mutate(site=gsub("CDFG Trawl ", "", site),
+         site=recode(site,
+                     "Manchester"="Manchester Beach"))
 
 # Inspect
 str(ca)
@@ -309,6 +322,9 @@ table(ca$year)
 table(ca$month)
 table(ca$port)
 table(ca$depth_fathoms) # needs work because not all fathoms or constant
+
+# Inspect
+sort(unique(ca$site))
 
 
 # Merge all data
@@ -350,7 +366,7 @@ data <- bind_rows(ca, or, wa) %>%
          dsp_id, dsp_tissue, dsp_ug100g, notes,
          everything()) %>% 
   # Remove
-  select(-c(county, waterbody, area, port, subsite, block_id,  depth_fathoms))
+  select(-c(county,  area, port,  block_id,  depth_fathoms))
 
 # Inspect
 freeR::complete(data)

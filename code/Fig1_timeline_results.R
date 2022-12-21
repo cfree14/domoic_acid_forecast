@@ -15,7 +15,7 @@ outdir <- "data/da_samples/data"
 plotdir <- "figures"
 
 # Read data
-data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_enhanced.Rds"))
+data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys.Rds"))
 
 # Read zones
 zones_orig <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_da_mgmt_zones.xlsx")
@@ -96,7 +96,7 @@ zones <- bind_rows(zones1, zones2) %>%
 
 # Format data
 data <- data_orig %>% 
-  filter(comm_name=="Dungeness crab" & !is.na(domoic_ppm) & year > 1998)
+  filter(year > 1998)
 
 
 # Plot data
@@ -123,7 +123,7 @@ my_theme <-  theme(axis.text=element_text(size=7),
                    axis.line = element_line(colour = "black"))
 
 # Plot survey data
-g1 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm, fill=domoic_ppm)) +
+g1 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=pover)) +
   # Season shading
   geom_rect(data=seasons_wa, inherit.aes=F, mapping=aes(xmin=open, xmax=close), ymin=46.25, ymax=48.48, fill="grey90") +
   geom_rect(data=seasons_or, inherit.aes=F, mapping=aes(xmin=open, xmax=close), ymin=42, ymax=46.25, fill="grey90") +
@@ -141,6 +141,8 @@ g1 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm, fill=domoic_ppm)) +
   annotate(geom="text", x=date_min_do, y=46.25, hjust=0, vjust=1.5, label="Oregon", color="grey30", size=2.5) +
   annotate(geom="text", x=date_min_do, y=42, hjust=0, vjust=1.5, label="N. California", color="grey30", size=2.5) +
   annotate(geom="text", x=date_min_do, y=son_mend_county, hjust=0, vjust=1.5, label="C. California", color="grey30", size=2.5) +
+  # Plot California N/As
+  annotate(geom="text", x=ymd("2015-03-15"), y=c(40.38437, 36.88437), label="N/A", color="grey30", size=2) +
   # Points
   geom_point(alpha=0.8, pch=21, stroke=0.3) +
   # Limits
@@ -151,9 +153,10 @@ g1 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm, fill=domoic_ppm)) +
   # Labels
   labs(x="Sample date", y="Latitude (°N)") +
   # Legends
-  scale_size_continuous(name="Domoic acid (ppm)", range = c(0.01, 4)) +
-  scale_fill_gradientn(name="Domoic acid (ppm)",
-                       colors=RColorBrewer::brewer.pal(9, "YlOrRd")) +
+  scale_size_continuous(name="Maximum\ndomoic acid (ppm)", range = c(0.01, 4)) +
+  scale_fill_gradientn(name="% over 30 ppm\naction threshold",
+                       colors=RColorBrewer::brewer.pal(9, "YlOrRd"),
+                       labels=scales::percent) +
   guides(fill = guide_colorbar(ticks.colour = "black", frame.colour = "black")) +
   # Theme
   theme_bw() + my_theme +
@@ -162,7 +165,7 @@ g1 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm, fill=domoic_ppm)) +
 g1
 
 # Export figure
-ggsave(g1, filename=file.path(plotdir, "Fig1_testing_timeline.png"), 
+ggsave(g1, filename=file.path(plotdir, "Fig1_survey_timeline.png"), 
        width=6.5, height=4.5, units="in", dpi=600)
 
 
