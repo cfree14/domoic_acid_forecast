@@ -30,7 +30,7 @@ data <- data_orig %>%
                             "North Willapa Bay"="NWB",
                             "OR/WA border to Pt Chehalis"="OR/WA-PC",
                             "Pt Brown to Queets River"="PB-QR",
-                            "Pt Chehalis to Destruction Island"="PC=DI",
+                            "Pt Chehalis to Destruction Island"="PC-DI",
                             "Queets River to Toleak Point"="QR-TP",
                             "Willapa Bay"="WB")) %>% 
   # Useable surveys
