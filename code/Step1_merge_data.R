@@ -308,11 +308,41 @@ ca <- bind_rows(ca1_crab, ca1_biv, ca2) %>%
   # Format site
   mutate(site=gsub("CDFG Trawl ", "", site),
          site=recode(site,
-                     "Manchester"="Manchester Beach"))
-
+                     "* Not Reported *"="Not reported",
+                     "Manchester"="Manchester Beach")) %>% 
+  # Fill in missing lat longs
+  # Del Norte County - too vague
+  # Santa Barbara Channel - too vague
+  # North Coast Fisheries - this might be a market sample
+  # The Tides (Sonoma County): 38.323039, -123.048138 - this might be a market sample
+  # Useable-ish
+  # Carmel River mouth (Monterey): 36.536208, -121.928477
+  # Santa Barbara, Isla Vista (Santa Barbara): 34.404467, -119.862879
+  # Monterey Bay, M0 (Monterey): 36.720031, -121.890194
+  # Humboldt, King Salmon (Humboldt): 40.753156, -124.212396
+  # Morro Bay, DFG Buoy: 35.360399, -120.911755
+  mutate(lat_dd=case_when(site=="Carmel River mouth" ~ 36.536208,
+                          site=="Santa Barbara, Isla Vista" ~ 34.404467,
+                          site=="Monterey Bay, M0" ~ 36.720031,
+                          site=="Humboldt Bay, King Salmon" ~ 40.753156,
+                          site=="Morro Bay, DFG Buoy" ~ 35.360399,
+                          T ~ lat_dd)) %>% 
+  mutate(long_dd=case_when(site=="Carmel River mouth" ~ -121.928477,
+                          site=="Santa Barbara, Isla Vista" ~ -119.862879,
+                          site=="Monterey Bay, M0" ~ -121.890194,
+                          site=="Humboldt Bay, King Salmon" ~ -124.212396,
+                          site=="Morro Bay, DFG Buoy" ~ -120.911755,
+                          T ~ long_dd))
+  
 # Inspect
 str(ca)
 freeR::complete(ca)
+
+# Sites without XY
+ca %>% 
+  filter(is.na(lat_dd)) %>% 
+  select(port, site, block_id, lat_dd, long_dd) %>% 
+  unique()
 
 # IDs unique?
 freeR::which_duplicated(ca$domoic_id)

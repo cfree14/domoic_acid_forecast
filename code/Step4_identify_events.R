@@ -11,7 +11,7 @@ library(tidyverse)
 # Directories
 indir <- "data/moore/processed"
 outdir <- "data/da_samples/data"
-plotdir <- "figures"
+plotdir <- "figures/working_figures"
 
 # Read data
 data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys.Rds"))
@@ -22,14 +22,26 @@ data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dc
 
 # Format data
 data <- data_orig %>% 
+  # Add site abbreviation for WA
+  mutate(site_abbrev=site,
+         site_abbrev=recode(site_abbrev,
+                            "Cape Disappointment/Pt Brown"="CD/PB",
+                            "Grays Harbor"="GH",
+                            "North Willapa Bay"="NWB",
+                            "OR/WA border to Pt Chehalis"="OR/WA-PC",
+                            "Pt Brown to Queets River"="PB-QR",
+                            "Pt Chehalis to Destruction Island"="PC=DI",
+                            "Queets River to Toleak Point"="QR-TP",
+                            "Willapa Bay"="WB")) %>% 
   # Useable surveys
   filter(n>=3) %>% 
   # Add event id
   mutate(event_id=case_when(state=="Oregon" ~ paste(season, state_abbrev, zone, sep="-"),
                             state=="California" ~ paste(season, state_abbrev, block_id, sep="-"),
-                            state=="Washington" ~ paste(season, state_abbrev, site, sep="-"),
+                            state=="Washington" ~ paste(season, state_abbrev, site_abbrev, sep="-"),
                             T ~ paste(season, state_abbrev, site, sep="-"))) %>% 
   # Arrange
+  select(-site_abbrev) %>% 
   select(state:site, lat_dd, long_dd, survey_id, event_id, everything()) 
 
 # Inspect
@@ -53,6 +65,12 @@ data_exp <- data %>%
   mutate(event_day0=min(date),
          event_day=difftime(date, event_day0, units = "day") %>% as.numeric()) %>% 
   ungroup()
+
+# Format data
+################################################################################
+
+# Export
+saveRDS(data_exp, file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys_with_event_id.Rds"))
 
 
 # Washington

@@ -7,6 +7,7 @@ rm(list = ls())
 
 # Packages
 library(tidyverse)
+library(lubridate)
 
 # Directories
 indir <- "data/moore/processed"
@@ -19,7 +20,7 @@ data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_en
 # Format data
 ################################################################################
 
-# WHat day of the year is July 15
+# What day of the year is each season closer?
 lubridate::yday("2020-07-15")
 lubridate::yday("2020-08-14")
 lubridate::yday("2020-09-15")
