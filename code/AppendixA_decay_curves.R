@@ -16,7 +16,6 @@ indir <- "data/moore/processed"
 outdir <- "data/da_samples/data"
 plotdir <- "figures"
 tabledir <- "tables"
-outdir <- "output"
 
 # Read data
 data_orig <- readRDS(file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys_with_event_id.Rds"))

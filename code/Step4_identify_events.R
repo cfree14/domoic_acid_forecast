@@ -71,6 +71,7 @@ data_exp <- data %>%
 
 # Export
 saveRDS(data_exp, file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys_with_event_id.Rds"))
+write.csv(data_exp, file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_surveys_with_event_id.csv"), row.names=F)
 
 
 # Washington
