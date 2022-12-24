@@ -22,7 +22,9 @@ zones_orig <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoi
 
 # Read sites
 sample_sites <- readxl::read_excel("/Users/cfree/Dropbox/Chris/UCSB/projects/domoic_acid_mgmt/data/merged/processed/WC_dcrab_sampling_sites.xlsx", sheet=2) %>% 
-  mutate(location=ifelse(state=="Washington", NA, location))
+  mutate(location=ifelse(state=="Washington", NA, location)) %>% 
+  mutate(location=recode(location,
+                         "Pillar Point (Half Moon Bay)"="Pillar Point"))
 
 # Get land
 usa <- rnaturalearth::ne_states(country="United States of America", returnclass = "sf")
@@ -104,7 +106,9 @@ zones_no_ncal_line <- zones %>%
 
 # Zone points
 zone_pts <- zones %>%
-  mutate(!is.na(lat_dd))
+  mutate(!is.na(lat_dd)) %>% 
+  mutate(zone_id=recode(zone_id,
+                        "60D"="60D/50-O"))
 
 # Borders
 border_n <- zones %>% arrange(desc(lat_dd_north)) %>% slice(1) %>% pull(lat_dd_north)
@@ -146,7 +150,7 @@ base_theme <-  theme(axis.text=element_text(size=6),
 g1 <- ggplot(zones) +
   # Plot management zones
   geom_hline(data=zones_no_ncal_line, mapping=aes(yintercept=lat_dd_north), linetype="dotted", size=0.2) +
-  geom_text(data=zones, mapping=aes(y=lat_dd_avg, label=zone_id), x=-126.5, hjust=0, size=1.5, color="grey50", show.legend = F) +
+  geom_text(data=zones, mapping=aes(y=lat_dd_avg, label=zone_id), x=-126.5, hjust=0, size=1.8, color="grey50", show.legend = F) +
   geom_hline(yintercept=borders, linetype="solid", color="black", size=0.2) +
   # Plot Sonoma-Mendocino country line
   geom_hline(yintercept=son_mend_county, linetype="dashed", size=0.2) +
@@ -158,7 +162,7 @@ g1 <- ggplot(zones) +
   # Plot sampling sites
   geom_point(data=sample_sites, mapping=aes(x=long_dd, y=lat_dd), size=1, color="darkred") +
   geom_text(data=sample_sites, mapping=aes(x=long_dd+0.3, y=lat_dd, label=location), 
-            hjust=0, size=1.2, color="darkred", show.legend = F) +
+            hjust=0, size=1.5, color="darkred", show.legend = F) +
   # Labels
   labs(x="", y="", tag="A") +
   scale_x_continuous(breaks=seq(-128,120,2)) +
@@ -181,7 +185,7 @@ g2 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=pover)) +
   # Management zone lines
   geom_segment(data=zones_df, mapping=aes(x=x1, xend=x2, y=y, yend=y),
                inherit.aes = F, linetype="solid", size=0.4, color="grey30") +
-  geom_text(data=zones, mapping=aes(y=lat_dd_avg, label=zone_id), x=ymd("2023-10-01"), hjust=0, size=1.5, inherit.aes = F, color="grey50") +
+  geom_text(data=zones, mapping=aes(y=lat_dd_avg, label=zone_id), x=ymd("2023-10-01"), hjust=0, size=1.8, inherit.aes = F, color="grey50") +
   # State/region lines
   geom_hline(yintercept=c(48.43333, 46.25000, 42.00000), size=0.4) +
   geom_hline(yintercept = son_mend_county, linetype="dashed", size=0.2) + # Sonoma/Mendocino
@@ -191,7 +195,7 @@ g2 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=pover)) +
   annotate(geom="text", x=date_min_do, y=42, hjust=0.2, vjust=1.5, label="N. California", color="grey30", size=2.2) +
   annotate(geom="text", x=date_min_do, y=son_mend_county, hjust=0.2, vjust=1.5, label="C. California", color="grey30", size=2.2) +
   # Plot California N/As
-  annotate(geom="text", x=ymd("2015-03-15"), y=c(40.38437, 36.88437), label="N/A", color="grey30", size=1.5) +
+  annotate(geom="text", x=ymd("2015-03-15"), y=c(40.38437, 36.88437), label="N/A", color="grey30", size=2) +
   # Points
   geom_point(alpha=0.8, pch=21, stroke=0.3) +
   # Limits
@@ -200,7 +204,7 @@ g2 <- ggplot(data, aes(x=date, y=lat_dd, size=domoic_ppm_max, fill=pover)) +
                lim=c(date_min_do, date_max_do),
                labels=year(date_min_do):year(date_max_do)) +
   # Labels
-  labs(x="Sample date", y="Latitude (°N)", tag="B") +
+  labs(x="Survey date", y="Latitude (°N)", tag="B") +
   # Legends
   scale_size_continuous(name="Maximum\ndomoic acid (ppm)", range = c(0.01, 4)) +
   scale_fill_gradientn(name="% over 30 ppm\naction threshold",
