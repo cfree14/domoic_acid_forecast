@@ -158,7 +158,7 @@ g1 <- ggplot(zones) +
   geom_sf(data=foreign, fill="grey90", color="white", lwd=0.3) +
   geom_sf(data=usa, fill="grey90", color="white", lwd=0.3) +
   # Plot management zone points
-  geom_text(data=zone_pts, mapping=aes(x=long_dd, y=lat_dd, label=zone_id), size=1.5, color="grey50", hjust=0) +
+  geom_text(data=zone_pts, mapping=aes(x=long_dd, y=lat_dd, label=zone_id), size=1.8, color="grey50", hjust=0) +
   # Plot sampling sites
   geom_point(data=sample_sites, mapping=aes(x=long_dd, y=lat_dd), size=1, color="darkred") +
   geom_text(data=sample_sites, mapping=aes(x=long_dd+0.3, y=lat_dd, label=location), 

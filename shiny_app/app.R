@@ -52,8 +52,8 @@ ui <- fluidPage(
                choices = c("C. California", "N. California", "Oregon", "Washington"),
                inline = T),
   
-  # Plot fit
-  plotOutput(outputId = "plot_data", width=750, height=500), 
+  # # Plot fit
+  # plotOutput(outputId = "plot_data", width=750, height=500), 
   
   # Plot historical comparison
   plotOutput(outputId = "plot_data_hist", width=750, height=500)
@@ -76,11 +76,11 @@ server <- function(input, output, session){
     read.csv(inFile$datapath, header = input$header)
   })
   
-  # Plot data
-  output$plot_data <- renderPlot({
-    g <- plot_data(data = data)
-    g
-  })
+  # # Plot data
+  # output$plot_data <- renderPlot({
+  #   g <- plot_data(data = data)
+  #   g
+  # })
   
   # Plot data
   output$plot_data_hist <- renderPlot({

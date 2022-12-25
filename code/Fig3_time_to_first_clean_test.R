@@ -67,11 +67,11 @@ data_days_med_pts <- data_days_med %>%
 ################################################################################
 
 # Base theme
-base_theme <- theme(axis.text=element_text(size=7),
-                    axis.title=element_text(size=8),
+base_theme <- theme(axis.text=element_text(size=8),
+                    axis.title=element_text(size=9),
                     legend.text=element_text(size=8),
-                    legend.title=element_text(size=8),
-                    plot.tag = element_text(size=9),
+                    legend.title=element_text(size=9),
+                    plot.tag = element_text(size=10),
                     # Gridlines
                     panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
@@ -90,7 +90,7 @@ g <- ggplot(data_days, aes(x=domoic_ppm, y=days2action, color=k, group=event_id)
   geom_text(data=data_days_med_pts, mapping=aes(x=domoic_ppm, y=days2action, label=label), 
             inherit.aes=F, size=3, hjust=1.2, vjust=-0.2) +
   # Labels
-  labs(x="Maximum domoic acid (ppm)", y="Days until first clean test\n(i.e., no samples above 30 ppm action threshold)") +
+  labs(x="Maximum domoic acid (ppm)", y="Days until the first clean test\n(i.e., no samples above 30 ppm action threshold)") +
   # Axes
   scale_x_continuous(breaks=seq(30, 200, 10)) +
   scale_y_continuous(breaks=seq(0, 500, 50)) +
@@ -107,7 +107,7 @@ g
 
 # Export figure
 ggsave(g, filename=file.path(plotdir, "Fig3_time_until_1st_clean.png"), 
-       width=4.5, height=4.5, units="in", dpi=600)
+       width=5, height=4, units="in", dpi=600)
 
 
 

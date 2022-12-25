@@ -70,11 +70,11 @@ data_centered_med <- data_centered %>%
 ################################################################################
 
 # Base theme
-base_theme <- theme(axis.text=element_text(size=7),
-                    axis.title=element_text(size=8),
+base_theme <- theme(axis.text=element_text(size=8),
+                    axis.title=element_text(size=9),
                     legend.text=element_text(size=8),
-                    legend.title=element_text(size=8),
-                    plot.tag = element_text(size=9),
+                    legend.title=element_text(size=9),
+                    plot.tag = element_text(size=10),
                     # Gridlines
                     panel.grid.major = element_blank(),
                     panel.grid.minor = element_blank(),
@@ -93,7 +93,7 @@ g1 <- ggplot(data_centered, aes(x=event_day_centered, y=da_ppm_max, color=b, gro
   # Reference line
   geom_hline(yintercept=30, linetype="dotted") +
   # Labels
-  labs(x="Day relative to day of the first clean test\n(i.e., no samples above 30 ppm action threshold)", y="Maximum domoic acid (ppm)", tag="A") +
+  labs(x="Day relative to the day of the first clean test\n(i.e., no samples above 30 ppm action threshold)", y="Maximum domoic acid (ppm)", tag="A") +
   # Y-axis
   scale_y_continuous(breaks=seq(0,200,10), lim=c(0,200)) +
   # Legend
