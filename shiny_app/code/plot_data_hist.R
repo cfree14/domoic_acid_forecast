@@ -1,6 +1,6 @@
 
 # Plot data
-plot_data_hist <- function(data, fits){
+plot_data_hist <- function(data, fits, state, hist_yn){
   
   # Fit model and build trajectory
   ###################################################
@@ -77,8 +77,23 @@ plot_data_hist <- function(data, fits){
     
   })
   
+  # Overwrite historial preds if not using
+  # if(hist_yn==F){
+  #   hist_preds$domoic_ppm_max <- NA
+  # }
+  
   # Plot data
   ###################################################
+  
+  # Season open date 
+  year <- lubridate::year(date0)
+  season_open_date <- case_when(state=="C. California" ~ "11/15", 
+                                state=="N. California" ~ "12/01",
+                                state=="Oregon" ~ "12/15",
+                                state=="Washington" ~ "12/15") %>% 
+    paste(year, sep="/") %>% 
+    lubridate::mdy()
+  # season_open_date_label <- season_open_date
   
   # Theme
   my_theme <- theme(axis.text=element_text(size=14),
@@ -109,7 +124,12 @@ plot_data_hist <- function(data, fits){
     geom_point(size=5) +
     # Plot reference line
     geom_hline(yintercept=30, linetype="dotted") +
-    annotate(geom="text", x=date0, y=30, hjust=0, vjust=-1, label="Action threshold", color="grey40", size=4) +
+    annotate(geom="text", x=date0, y=30, hjust=0, vjust=-1, 
+             label="Action threshold", color="grey40", size=4) +
+    # Plot season opener
+    geom_vline(xintercept=season_open_date, linetype="dotted") +
+    annotate(geom="text", x=season_open_date, y=200, hjust=-0.2, vjust=0, 
+             label="Open date", color="grey40", size=4) +
     # Plot 30 ppm day
     geom_point(x=date30ppm, y=30, pch=21, fill="red", color="black", size=5) +
     geom_text(x=date30ppm, y=30, label=date30ppm, color="red", size=5, hjust=0, vjust=-1, inherit.aes = F) +

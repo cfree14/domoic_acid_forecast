@@ -30,7 +30,7 @@ data <- tibble(day=c(1,7,14,21),
                se_ppm=c(6.6, 6.6, 8.2, 6.0),
                perc=c(100, 62, 27, 11)) %>% 
   mutate(da_ppm_hi = da_ppm + sd_ppm,
-         da_ppm_lo = da_ppm - sd_ppm)
+         da_ppm_lo = pmax(da_ppm - sd_ppm, 0))
 
 # Fit exponential decay
 lmfit <- lm(log(da_ppm) ~ day, data)

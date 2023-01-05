@@ -46,7 +46,12 @@ ui <- fluidPage(
             multiple = FALSE, 
             accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
   
-  # Radio buttons
+  # Plot historical? - 
+  checkboxInput(inputId = "hist_yn",
+                label = "Overlay historical depuration trajectories?",
+                value=F),
+  
+  # State? - radio buttons
   radioButtons(inputId = "state", 
                label="Select region:",
                choices = c("C. California", "N. California", "Oregon", "Washington"),
@@ -84,7 +89,10 @@ server <- function(input, output, session){
   
   # Plot data
   output$plot_data_hist <- renderPlot({
-    g <- plot_data_hist(data = data, fits = fits)
+    g <- plot_data_hist(data = data, 
+                        fits = fits, 
+                        state = input$state,
+                        hist_yn = input$hist_yn)
     g
   })
   
