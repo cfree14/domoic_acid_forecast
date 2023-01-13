@@ -106,7 +106,7 @@ g <- ggplot(data_days, aes(x=domoic_ppm, y=days2action, color=k, group=event_id)
 g
 
 # Export figure
-ggsave(g, filename=file.path(plotdir, "Fig3_time_until_1st_clean.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig4_time_until_1st_clean.png"), 
        width=5, height=4, units="in", dpi=600)
 
 

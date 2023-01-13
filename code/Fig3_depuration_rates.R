@@ -143,7 +143,7 @@ g <- gridExtra::grid.arrange(g1, g2, g3, nrow=1, widths=c(0.5, 0.25, 0.25))
 g
 
 # Export plot
-ggsave(g, filename=file.path(plotdir, "Fig2_depuration_rate.png"), 
+ggsave(g, filename=file.path(plotdir, "Fig3_depuration_rate.png"), 
        width=6.5, height=3.5, units="in", dpi=600)
 
 
