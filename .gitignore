@@ -2,3 +2,8 @@
 .Rhistory
 .RData
 .Ruserdata
+
+
+# Ignore a big file
+data/glorys/raw
+data/glorys/processed/1993_2020_WC_bottom_temps.tiff
