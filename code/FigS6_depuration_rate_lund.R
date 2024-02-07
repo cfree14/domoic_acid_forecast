@@ -9,13 +9,14 @@ rm(list = ls())
 library(tidyverse)
 
 # Directories
-indir <- "data/moore/processed"
-outdir <- "data/da_samples/data"
+datadir <- "data/lund"
 plotdir <- "figures"
 tabledir <- "tables"
 
-# Packages
-library(tidyverse)
+# Read data
+data_orig <- readxl::read_excel(file.path(datadir, "lund_etal_1997_data.xlsx")) %>% 
+  mutate(da_ppm_hi = da_ppm + sd_ppm,
+         da_ppm_lo = pmax(da_ppm - sd_ppm, 0))
 
 
 # Build data and fit model
@@ -23,14 +24,8 @@ library(tidyverse)
 
 # Lund 1997 data
 # μg = ppm 
-data <- tibble(day=c(1,7,14,21),
-               n=c(8,6,7,7),
-               da_ppm=c(69.5, 43.4, 19, 7.6),
-               sd_ppm=c(18.6, 21, 21.8, 16.0),
-               se_ppm=c(6.6, 6.6, 8.2, 6.0),
-               perc=c(100, 62, 27, 11)) %>% 
-  mutate(da_ppm_hi = da_ppm + sd_ppm,
-         da_ppm_lo = pmax(da_ppm - sd_ppm, 0))
+data <- data_orig %>% 
+  filter(scenario=="Fed")
 
 # Fit exponential decay
 lmfit <- lm(log(da_ppm) ~ day, data)
@@ -104,4 +99,41 @@ ggsave(g, filename=file.path(plotdir, "FigS6_lund_depuration_rate.png"),
 
 
 
+# Build data and fit model
+################################################################################
 
+# Lund 1997 data
+# μg = ppm 
+data <- tibble(day=c(1,7,14,21),
+               n=c(8,6,7,7),
+               da_ppm=c(69.5, 66.94, 19, 7.6),
+               sd_ppm=c(18.6, 21, 21.8, 16.0),
+               se_ppm=c(6.6, 6.6, 8.2, 6.0),
+               perc=c(100, 62, 27, 11)) %>% 
+  mutate(da_ppm_hi = da_ppm + sd_ppm,
+         da_ppm_lo = pmax(da_ppm - sd_ppm, 0))
+
+# Fit exponential decay
+lmfit <- lm(log(da_ppm) ~ day, data)
+
+# Inspect 
+lmfit
+summary(lmfit)
+b <- coef(lmfit)[2]
+pval <- freeR::pval(lmfit)
+halflife_days <- log(2) / abs(b)
+halflife_hrs <- halflife_days * 24
+
+# Predictions for plotting
+x <- seq(1,30,1)
+preds_list <- predict(lmfit, newdata = data.frame(day=x), se.fit=T)
+preds <- tibble(x=x,
+                y=exp(preds_list$fit),
+                y_lo=exp(preds_list$fit-preds_list$se.fit*1.96),
+                y_hi=exp(preds_list$fit+preds_list$se.fit*1.96))
+
+# Build stats text
+pval_text <- paste0("p=", round(pval, 3))
+half_life_text <- paste(round(halflife_days, 1), " day half-life")
+rate_text <- paste0(round(b*100, 1), "% depuration rate")
+stat_text <- paste(pval_text, half_life_text, rate_text, sep="\n")
