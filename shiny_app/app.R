@@ -22,7 +22,11 @@ codedir <- "code"  # for actual app
 fits <- readRDS(file.path(datadir, "model_fits.Rds"))
 
 # Read data for testing
-data <- read.csv(file.path(datadir, "test_data.csv")) %>% 
+data1 <- read.csv(file.path(datadir, "example_data1.csv")) %>% 
+  mutate(date=lubridate::mdy(date))
+data2 <- read.csv(file.path(datadir, "example_data2.csv")) %>% 
+  mutate(date=lubridate::mdy(date))
+data3 <- read.csv(file.path(datadir, "example_data3.csv")) %>% 
   mutate(date=lubridate::mdy(date))
 
 # Read scripts
@@ -39,12 +43,27 @@ ui <- fluidPage(
   # Title
   titlePanel("Domoic acid depuration forecast tool"),
   
+  # Background
+  h3("Background"),
+  
+  # Download example data
+  p("Download and try out one of the following example files:"),
+  a("Example 1", href="./example_data1.csv"),
+  a("Example 2", href="./example_data1.csv"),
+  a("Example 3", href="./example_data1.csv"),
+  br(),
+  br(),
+  
   # Upload data
+  h3("Upload data"),
   p("The uploaded data file must be a CSV with the following columns: event_id, date, domoic_ppm_max"),
   fileInput(inputId="inFile", 
             label="Upload data file", 
             multiple = FALSE, 
             accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
+  
+  # Data visualizer
+  h3("Forecast depuration timeline"),
   
   # Plot historical? - 
   checkboxInput(inputId = "hist_yn",
@@ -61,7 +80,14 @@ ui <- fluidPage(
   # plotOutput(outputId = "plot_data", width=750, height=500), 
   
   # Plot historical comparison
-  plotOutput(outputId = "plot_data_hist", width=750, height=500)
+  plotOutput(outputId = "plot_data_hist", width=750, height=500),
+  
+  # Citation
+  h3("Citation"),
+  p("Please site this tool using the following paper:"),
+  p("Free CM, Moore SM, Holland D, Shelton A. Predicting domoic acid depuration timelines in the US West Coast Dungeness crab fishery. In preparation for Harmful Algae."),
+  br(),
+  br()
 
   
 )
@@ -81,6 +107,13 @@ server <- function(input, output, session){
     read.csv(inFile$datapath, header = input$header)
   })
   
+  # Read file
+  df = reactive({
+    req(input$file1)
+    df <- read.csv(input$file1$datapath)
+    return(df)
+  })
+  
   # # Plot data
   # output$plot_data <- renderPlot({
   #   g <- plot_data(data = data)
@@ -89,12 +122,22 @@ server <- function(input, output, session){
   
   # Plot data
   output$plot_data_hist <- renderPlot({
-    g <- plot_data_hist(data = data, 
+    g <- plot_data_hist(data = data1, 
                         fits = fits, 
                         state = input$state,
                         hist_yn = input$hist_yn)
     g
   })
+  
+  # Download example data
+  output$downloadData1 <- downloadHandler(
+    filename = function() {
+      paste("data-", Sys.Date(), ".csv", sep="")
+    },
+    content = function(file) {
+      write.csv(data, file)
+    }
+  )
   
 }
 

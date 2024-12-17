@@ -27,6 +27,8 @@ source("code/get_sst.R")
 # Add SST data
 data <- get_sst(data_orig)
 
+# Export data
+saveRDS(data, file=file.path(outdir, "CA_OR_WA_2000_2020_biotoxin_data_dcrab_with_temps.Rds"))
 
 
 

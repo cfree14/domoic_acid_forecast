@@ -66,7 +66,7 @@ get_sst <- function(data){
     coords <- gps_key[i, c("long_dd", "lat_dd")] %>% as.numeric()
     
     # Calculate distances between each row in gps_key and all rows in oisst_gps
-    distances <- geosphere::distm(coords, oisst_gps[, c( "long_dd", "lat_dd")], fun = distHaversine)
+    distances <- geosphere::distm(coords, oisst_gps[, c( "long_dd", "lat_dd")], fun = geosphere::distHaversine)
     
     # Find the index of the minimum distance
     min_dist_index <- which.min(distances)
@@ -76,7 +76,7 @@ get_sst <- function(data){
     coords_closest <- oisst_gps[min_dist_index, c("long_dd", "lat_dd")] %>% as.numeric()
     
     # Calculate distance between coordinates
-    dist_m <- distHaversine(coords, coords_closest)
+    dist_m <- geosphere::distHaversine(coords, coords_closest)
     dist_km <- dist_m / 1000
     
     # Add closest coordinates and distance to gps_key
