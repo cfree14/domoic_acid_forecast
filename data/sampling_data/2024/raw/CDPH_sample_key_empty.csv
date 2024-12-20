@@ -1,0 +1,96 @@
+"sample_code","species_tissue","species","n"
+"ABRD","Abalone, red","Haliotis rufescens",6
+"ABRV","Abalone, red viscera","Haliotis rufescens",2
+"ANCH","Northern Anchovy, head","Engraulis mordax",8
+"ANCM","Northern Anchovy, meat","Engraulis mordax",8
+"ANCN","Northern Anchovy","Engraulis mordax",146
+"ANCV","Northern Anchovy, viscera","Engraulis mordax",8
+"BAGN","Gooseneck Barnacle","Pollicipes polymerus",2
+"CLBC","Basket Cockle","Clinocardium nuttallii",2
+"CLGA","Gaper Clam","Tresus nuttallii",8
+"CLGM","Gaper Clam meat","Tresus nuttallii",3
+"CLGS","Gaper Clam siphon","Tresus nuttallii",2
+"CLGV","Gaper Clam viscera","Tresus nuttallii",3
+"CLLN","Littleneck Clam","Leukoma staminea",25
+"CLMA","Manila Clam","Ruditapes philippinarum",2
+"CLPI","Pismo Clam","Tivela stultorum",81
+"CLPM","Pismo Clam meat","Tivela stultorum",2
+"CLPV","Pismo Clam viscera","Tivela stultorum",3
+"CLRM","Razor Clam meat","Siliqua patula",837
+"CLRV","Razor Clam viscera","Siliqua patula",97
+"CLRZ","Clam, razor","Siliqua patula",74
+"CLUN","Clam, unidentified",NA,3
+"CLWA","Washington Clam","Saxidomus nuttalli",8
+"CLWM","Washington Clam, meat","Saxidomus nuttalli",1
+"CLWS","Washington Clam, siphon","Saxidomus nuttalli",10
+"CLWV","Washington Clam, viscera","Saxidomus nuttalli",11
+"CRBB","Crab, Brown Rock, body meat","Cancer antennarius",2
+"CRBL","Crab, Brown Rock, leg meat","Cancer antennarius",2
+"CRBV","Crab, Brown Rock, viscera","Cancer antennarius",72
+"CRDB","Crab, Dungeness, body meat","Metacarcinus magister",16
+"CRDL","Crab, Dungeness, leg meat","Metacarcinus magister",7
+"CRDV","Crab, Dungeness, viscera","Metacarcinus magister",1172
+"CRMV","Crab, Stone, viscera","Menippe mercenaria",18
+"CRPH","Pelagic Red Crab, head","Pleuroncodes planipes",5
+"CRPR","Crab, Pelagic Red","Pleuroncodes planipes",16
+"CRPT","Pelagic Red Crab, tail","Pleuroncodes planipes",5
+"CRRB","Crab, Red Rock, body meat","Cancer productus",14
+"CRRL","Crab, Red Rock, leg meat","Cancer productus",14
+"CRRM","Crab, Red Rock, muscle","Cancer productus",1
+"CRRR","Crab, Red Rock","Cancer productus",5
+"CRRV","Crab, Red Rock, viscera","Cancer productus",250
+"CRSV","Crab, Spider, viscera","Loxorhynchus grandis",10
+"CRSW","Crab, Swimming","Portunus xantusii",1
+"CRUB","Crab, unknown rock, body meat","Cancer sp.",5
+"CRUV","Crab, unknown rock, viscera","Cancer sp.",562
+"CRYB","Crab, Yellow Rock, body meat","Cancer anthonyi",6
+"CRYL","Crab, Yellow Rock, leg meat","Cancer anthonyi",6
+"CRYV","Crab, Yellow Rock, viscera","Cancer anthonyi",20
+"GRUN","Grunion, whole","Leuresthes tenuis",2
+"LOBM","Lobster, Spiny, muscle",NA,14
+"LOBR","Lobster, Spiny, roe",NA,1
+"LOBV","Lobster, Spiny, viscera",NA,213
+"LPCM","Lamprey, Pacific, meat","Entosphenus tridentatus",3
+"MACK","Mackeral",NA,3
+"MACM","Mackeral, muscle",NA,2
+"MACV","Mackeral, viscera",NA,2
+"MACW","Mackeral, whole",NA,1
+"MSMU","Matrix spike, mussel",NA,4
+"MUBC","Bay Mussel, cultured","Mytilus galloprovincialis",1578
+"MUBS","Bay Mussel, Sentinel","Mytilus gallo/trossulus/edulis",383
+"MUBW","Bay Mussel, wild","Mytilus gallo/trossulus/edulis",631
+"MUSB","Mixed Sea/Bay Mussels",NA,46
+"MUSS","Sea Mussel, Sentinel","Mytilus californianus",1688
+"MUSW","Sea Mussel, wild","Mytilus californianus",3512
+"OYKC","Kumamoto Oyster, cultured","Magallana sikamea",19
+"OYPC","Pacific Oyster, cultured","Crassostrea gigas",2817
+"OYPS","Sentinel Pacific Oyster","Crassostrea gigas",1
+"SALL","Salmon, liver",NA,3
+"SALM","Salmon, meat",NA,3
+"SALV","Salmon, viscera",NA,3
+"SARD","Sardine",NA,37
+"SARH","Sardine, head",NA,1
+"SARM","Sardine, muscle",NA,5
+"SARV","Sardine, viscera",NA,5
+"SARW","Sardine, whole",NA,147
+"SCCA","Cultured Rock Scallop,adductor","Crassadoma gigantea",3
+"SCCV","Cultured Rock Scallop, viscera","Crassadoma gigantea",12
+"SCLD","LongB Dolphin, Stomach Fluid",NA,1
+"SCWA","Rock Scallop adductor","Crassadoma gigantea",18
+"SCWG","Rock Scallop mantle, gills","Crassadoma gigantea",2
+"SCWV","Rock Scallop viscera","Crassadoma gigantea",51
+"SCWW","Rock Scallop, wild","Crassadoma gigantea",17
+"SPBM","Surfperch, Black, Meat","Embiotoca jacksoni",3
+"SPBV","Surfperch, Black, Viscera","Embiotoca jacksoni",3
+"SPPM","Surfperch, Pile, Meat","Rhacochilus vacca",2
+"SPPV","Surfperch, Pile, Viscera","Rhacochilus vacca",2
+"SPRM","Surfperch, Barred, Meat","Amphistichus argenteus",4
+"SPRV","Surfperch, Barred, Viscera","Amphistichus argenteus",4
+"SPSM","Surfperch, Shiner, Meat","Cymatogaster aggregata",1
+"SPSV","Surfperch, Shiner, Viscera","Cymatogaster aggregata",1
+"SQUI","Squid",NA,1
+"STLD","LongB Dolphin, Stomach",NA,1
+"TBRM","Ray, Thornback, meat","Platyrhinoidis triseriata",1
+"TBRV","Ray, Thornback, viscera","Platyrhinoidis triseriata",1
+"USHR","Shrimp, unidentified",NA,1
+"YTAM","California Yellowtail, meat","Seriola dorsalis",1

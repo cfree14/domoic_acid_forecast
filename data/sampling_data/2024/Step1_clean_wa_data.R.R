@@ -32,11 +32,14 @@ data <- data_orig %>%
          organization=org,
          organization_id=cert_number,
          site=site_name,
-         date_received=receive_date) %>% 
+         date_received=receive_date,
+         comm_name=species) %>% 
   # Format species
-  mutate(species=str_to_sentence(species)) %>% 
+  mutate(comm_name=str_to_sentence(comm_name)) %>% 
+  # Add year
+  mutate(year=lubridate::year(date_collected)) %>% 
   # Arrange
-  select(date_collected, date_submitted, date_received,
+  select(year, date_collected, date_submitted, date_received,
          county, waterbody, organization, organization_id,
          site_id, site, subsite,
          everything())
@@ -45,7 +48,7 @@ data <- data_orig %>%
 str(data)
 
 # Inspect
-table(data$species)
+table(data$comm_name)
 table(data$county)
 table(data$fresh_frozen)
 table(data$shell_shucked)
@@ -61,3 +64,9 @@ data %>%
 # Site key
 site_key <- data %>% 
   count(site_id, site, subsite)
+
+# Export data
+################################################################################
+
+# Export data
+saveRDS(data, file=file.path(outdir, "WA_biotoxin_data.Rds"))
