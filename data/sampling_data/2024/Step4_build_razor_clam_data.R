@@ -56,12 +56,11 @@ wa <- wa_orig %>%
   mutate(state="Washington") %>% 
   # Rename
   rename(date=date_collected,
-         tissue=domoic_tissue,
-         domoic_ppm=domoic_result) %>% 
+         tissue=domoic_tissue) %>% 
   # Simplify
   select(state, year, date, 
          site, #lat_dd, long_dd, 
-         comm_name, tissue) #, domoic_ppm)
+         comm_name, tissue, domoic_ppm)
 
 # Merge
 data <- bind_rows(ca, or, wa)

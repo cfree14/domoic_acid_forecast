@@ -17,6 +17,9 @@ plotdir <- "figures"
 # Read data
 data_orig <- readxl::read_excel(file.path(indir, "OR biotoxin Data 12.9.2024.xlsx"), col_types = "text")
 
+# To-do list
+# Add coordinates
+
 # Format data
 ################################################################################
 
@@ -77,11 +80,12 @@ freeR::complete(data)
 
 # Inspect
 table(data$comm_name)
+freeR::uniq(data$comm_name)
 table(data$tissue)
 
 # Area
 table(data$area)
-table(data$site)
+freeR::uniq(data$site)
 table(data$dcrab_area)
 
 
