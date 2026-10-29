@@ -98,7 +98,7 @@ g <- ggplot(data_days, aes(x=domoic_ppm, y=days2action, color=k, group=event_id)
   scale_color_gradientn(name="Daily depuration rate", 
                         colors=RColorBrewer::brewer.pal(9, "Spectral"), 
                         labels=scales::percent) +
-  guides(color = guide_colorbar(ticks.colour = "black", frame.colour = "black")) +
+  guides(color = guide_colorbar(ticks.colour = "black", frame.colour = "black", frame.linewidth = 0.2)) +
   # Theme
   theme_bw() + base_theme +
   theme(legend.position = c(0.2,0.8),

@@ -29,7 +29,7 @@ names(data_orig$dim)
 names(data_orig$var)
 
 # Learn about data - tidync way
-data0 <- tidync("https://cfree:Overmars.14!@my.cmems-du.eu/thredds/dodsC/cmems_mod_glo_phy_my_0.083_P1D-m")
+data0 <- tidync("https://cfree:Science1234!!@my.cmems-du.eu/thredds/dodsC/cmems_mod_glo_phy_my_0.083_P1D-m")
 hyper_vars(data0)
 hyper_dims(data0)
 

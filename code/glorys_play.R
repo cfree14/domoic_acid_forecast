@@ -205,8 +205,8 @@ data_nc <- download_glorys(username="cfree",
                            password="Science1234!",
                            dataset="cmems_mod_glo_phy_my_0.083deg_P1D-m",
                            variable="bottomT",
-                           bbox=c(-126, -115, 32, 42),
-                           daterange=c("2020-01-01", "2020-01-08"),
+                           bbox=c(-126, -115, 32, 49),
+                           daterange=c("1993-01-01", "2021-06-30"), 
                            filename=file.path("~/Desktop", "example.nc"))
 
 # Convert to fahrenheit

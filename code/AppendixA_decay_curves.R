@@ -9,7 +9,6 @@ rm(list = ls())
 # devtools::install_github("guiastrennec/ggplus")
 library(tidyverse)
 library(lubridate)
-library(ggplus)
 
 # Directories
 indir <- "data/moore/processed"
@@ -271,3 +270,55 @@ ggsave(g, filename=file.path(plotdir, "AppendixA_decay_curves.png"),
 
 
 
+####################################################################################
+
+
+# Theme
+my_theme <-  theme(axis.text=element_text(size=8),
+                   axis.title=element_text(size=9),
+                   legend.text=element_text(size=8),
+                   legend.title=element_text(size=9),
+                   strip.text=element_text(size=8),
+                   # Gridlines
+                   panel.grid.major = element_blank(),
+                   panel.grid.minor = element_blank(),
+                   panel.background = element_blank(),
+                   axis.line = element_line(colour = "black"),
+                   # Legend
+                   legend.background = element_rect(fill=alpha('blue', 0)),
+                   legend.position = c(0.8, 0.05),
+                   legend.key.size = unit(0.3, "cm"))
+
+# Example curves
+event_ids <- c("2015-CA-249", "2015-CA-132", "2015-CA-108")
+
+# Plot data
+g <- ggplot(data %>% filter(event_id %in% event_ids), aes(x=event_day, y=domoic_ppm_max)) +
+  # Facet (don't facet here if using multi-page plot)
+  facet_wrap(~event_id, ncol=1, scales="free") +
+  # Fix CIs
+  geom_ribbon(data=preds_out %>% filter(event_id %in% event_ids), 
+              mapping=aes(x=event_day, ymin=domoic_ppm_max_lo, ymax=domoic_ppm_max_hi), fill="grey90", color=NA) +
+  # Fit predictions
+  geom_line(data=preds_out %>% filter(event_id %in% event_ids),
+            mapping=aes(x=event_day, y=domoic_ppm_max), color="black") +
+  # Points
+  geom_point() +
+  # Plot text
+  # geom_text(data=params_out %>% filter(event_id %in% event_ids), 
+  #           mapping=aes(x=event_day_max, y=domoic_ppm_max_plot*0.95, label=plot_text), hjust=1, size=2.4) +
+  # Reference line
+  geom_hline(yintercept=30, linetype="dotted") +
+  # Labels
+  labs(x="Day of event", y="Maximum domoic acid (ppm)") +
+  # Axes
+  scale_y_continuous(lim=c(0,NA)) +
+  # Legend
+  scale_color_discrete(name="State", guide="none") +
+  # Theme
+  theme_bw() + my_theme
+g
+
+# Export
+ggsave(g, filename=file.path(plotdir, "example_curves_for_presentation.png"),
+       width=2.5, height=6, units="in", dpi=600)
